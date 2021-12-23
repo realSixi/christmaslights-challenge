@@ -13,8 +13,12 @@ const hsv2rgb = (h, s, v) => {
 
 const delay = time => new Promise(resolve => setTimeout(resolve, time));
 
+const map_range = (value, low1, high1, low2, high2) =>
+  low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
+
 module.exports = {
   limit,
   hsv2rgb,
   delay,
+  map_range
 };
