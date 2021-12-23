@@ -12,7 +12,6 @@ packet.setUniverse(0x01); // make universe number consistent with the client
 packet.setOption(packet.Options.PREVIEW, true); // don't really change any fixture
 packet.setPriority(packet.DEFAULT_PRIORITY); // not strictly needed, done automatically
 
-
 const map_range = (value, low1, high1, low2, high2) =>
   low2 + ((high2 - low2) * (value - low1)) / (high1 - low1);
 
@@ -23,27 +22,21 @@ let inc = 0;
 let color = 0;
 
 async function loop() {
-  // console.log()
   for (let i = 0; i < numberOfLeds; i++) {
-    if (i % 5 == Math.floor((inc / 10) % 5)) {
+    if (i % 3 == Math.floor((inc / 10) % 3)) {
       let x = map_range((inc / 20) % 1000, 0, 1000, 0, 360);
-      colors[i] = hsv2rgb(x, 100, 5);
+      colors[i] = hsv2rgb(0, map_range(i, 0, numberOfLeds, 200, 0), 5);
     } else {
       colors[i] = 0;
     }
   }
 
-  // let c1 = Math.floor(map_range(Math.sin(inc / 100), -1, 1, 0, numberOfLeds));
-  // colors[c1] = hsv2rgb(color, 100, 20);
 
-  // let c2 = Math.floor(map_range(Math.sin((inc + 20) / 100), -1, 1, 0, numberOfLeds));
-  // colors[c2] = hsv2rgb(color, 100, 20);
-
-  for (let i = 0; i < 100; i += 20) {
+  for (let i = 0; i < 100; i += 10) {
     let c2 = Math.floor(
-      map_range(Math.sin((inc + i) / 100), -1, 1, 0, numberOfLeds)
+      map_range(Math.sin((inc + i) / 100), -1, 1, -10, numberOfLeds + 1)
     );
-    colors[c2] = hsv2rgb((color + 2 * i) % 360, 100, 100);
+    colors[c2] = hsv2rgb((color + 4 * i) % 360, 100, 100);
   }
 
   color = (color + 1) % 360;
@@ -66,7 +59,7 @@ function refreshColors() {
   }
 
   client.send(packet, function () {
-    setTimeout(refreshColors, 1000 / 60);
+    setTimeout(refreshColors, 1000 / 30);
   });
 }
 refreshColors();
